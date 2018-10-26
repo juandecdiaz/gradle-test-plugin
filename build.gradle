@@ -1,20 +1,12 @@
-buildscript {
-    ext {
-        karate_version = "0.8.0"
-    }
-}
-
 plugins {
     id "java-gradle-plugin"
     id 'java'
     id "groovy"
     id "maven-publish"
-    id "com.gradle.plugin-publish" version "0.9.10"
-    id "de.undercouch.download" version "3.4.3"
 }
 
 group "net.juandecdiaz"
-version "0.1"
+version "1.0-SNAPSHOT"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,83 +15,12 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    //Gradle API calls in source
-    compile gradleApi()
-
-    /********** Testing **********/
-    testCompile "junit:junit:4.12"
-
-    /********** Karate **********/
-    testCompile("com.intuit.karate:karate-junit4:${karate_version}")
-    testCompile("com.intuit.karate:karate-apache:${karate_version}")
-
-}
-
-sourceSets {
-    test {
-        java.srcDir file("src/test/unit/java")
-        resources.srcDir file("src/test/unit/resources")
-        compileClasspath += sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath += output + compileClasspath
-    }
-    integrationTest {
-        java.srcDir file("src/test/integration/java")
-        resources.srcDir file("src/test/integration/resources")
-        compileClasspath += sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath += output + compileClasspath
-    }
-}
-
-task integrationTest(type: Test) {
-    description = "Runs the integration tests."
-    group = "verification"
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-}
-
-task downloadTestRunner(type: Download) {
-    src "https://dl.bintray.com/ptrthomas/karate/karate-0.8.0.1.jar"
-    dest buildDir
-}
-
-
-task componentTest{
-    group = 'verification'
-    doLast {
-        println 'Hello, componentTest!'
-    }
-}
-
-componentTest.dependsOn downloadTestRunner
-check.dependsOn integrationTest
-check.dependsOn componentTest
-
-gradlePlugin {
-    testSourceSets sourceSets.test
-    testSourceSets sourceSets.integrationTest
-}
-
 //Configure the auto-generated plugin manifest
 gradlePlugin {
     plugins {
         testPlugin {
             id = 'net.juandecdiaz.test-plugin'
             implementationClass = 'net.juandecdiaz.gradle.plugin.TestPlugin'
-        }
-    }
-}
-
-//Configure plugin publishing to the Gradle Plugin portal
-pluginBundle {
-    website = "https://github.com/juandecdiaz/gradle-test-plugin"
-    vcsUrl = "https://github.com/juandecdiaz/gradle-test-plugin.git"
-    plugins {
-        testPlugin {
-            id = "net.juandecdiaz.test-plugin"
-            displayName = "Gradle Test Plugin"
-            description = "Gradle wrapper plugin for testing utility"
-            tags = ["test"]
         }
     }
 }

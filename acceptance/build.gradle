@@ -1,0 +1,10 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath group: "net.juandecdiaz.test-plugin", name: "net.juandecdiaz.test-plugin.gradle.plugin", version: "1.0-SNAPSHOT"
+    }
+}
+
+apply plugin: "net.juandecdiaz.test-plugin"
