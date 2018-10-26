@@ -5,7 +5,7 @@ import org.gradle.api.Plugin;
 
 public class TestPlugin implements Plugin<Project> {
 
-    private String greeting = "Java Base Plugin";
+    private String greeting = "Test Plugin";
 
     @Override
     public void apply(Project target) {
